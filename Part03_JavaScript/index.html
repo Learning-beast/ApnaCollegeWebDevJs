@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Sorting Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: gray;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+        .fruits, .basket {
+            width: 20%;
+            min-height: 200px;
+            padding: 20px;
+            border: 2px dashed #333;
+            background-color: white;
+            border-radius: 10px;
+        }
+        .fruit {
+            padding: 10px;
+            margin: 10px;
+            background-color: orange;
+            color: white;
+            font-weight: bold;
+            cursor: grab;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍎 Drag and Drop Fruit Sorting 🍌</h1>
+    <div class="container">
+        <div class="fruits">
+            <div class="fruit" draggable="true" id="green_grape">🍇 Green Grape</div>
+            <div class="fruit" draggable="true" id="red_grape">🍇 Red Grape</div>
+            <div class="fruit" draggable="true" id="ripe_mango">🥭 Ripe Mango</div>
+            <div class="fruit" draggable="true" id="raw_mango">🥭 Raw Mango</div>
+            <div class="fruit" draggable="true" id="yellow_banana">🍌 Yellow Banana</div>
+            <div class="fruit" draggable="true" id="green_banana">🍌 Green Banana</div>
+            <div class="fruit" draggable="true" id="red_apple">🍎 Red Apple</div>
+            <div class="fruit" draggable="true" id="green_apple">🍏 Green Apple</div>
+        </div>
+        <div class="basket" id="grape_basket">
+            <h3>Grapes Basket 🍇</h3>
+        </div>
+        <div class="basket" id="mango_basket">
+            <h3>Mango Basket 🥭</h3>
+        </div>
+        <div class="basket" id="banana_basket">
+            <h3>Banana Basket 🍌</h3>
+        </div>
+        <div class="basket" id="apple_basket">
+            <h3>Apple Basket 🍏🍎</h3>
+        </div>
+    </div>
+    <script>
+        const fruits = document.querySelectorAll('.fruit');
+        const baskets = document.querySelectorAll('.basket');
+        
+        fruits.forEach(fruit => {
+            fruit.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.id);
+            });
+        });
+        
+        baskets.forEach(basket => {
+            basket.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            basket.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const fruitId = e.dataTransfer.getData('text');
+                const fruit = document.getElementById(fruitId);
+                
+                if (
+                    (fruitId.includes('grape') && basket.id === 'grape_basket') ||
+                    (fruitId.includes('mango') && basket.id === 'mango_basket') ||
+                    (fruitId.includes('banana') && basket.id === 'banana_basket') ||
+                    (fruitId.includes('apple') && basket.id === 'apple_basket')
+                ) {
+                    basket.appendChild(fruit);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

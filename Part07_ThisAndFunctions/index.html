@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do Drag and Drop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .box {
+            width: 30%;
+            min-height: 200px;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .task {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #e0e0e0;
+            color: #333;
+            font-weight: bold;
+            cursor: grab;
+            border-radius: 5px;
+        }
+        .box h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .input-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 8px 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 To-Do Drag and Drop</h1>
+    
+    <!-- Input form to add new tasks -->
+    <div class="input-container">
+        <input type="text" id="taskInput" placeholder="Enter a new task" />
+        <button id="addTaskBtn">Add Task</button>
+    </div>
+
+    <div class="container">
+        <div class="box" id="todo">
+            <h3>To-Do</h3>
+        </div>
+        <div class="box" id="in_progress">
+            <h3>In Progress</h3>
+        </div>
+        <div class="box" id="completed">
+            <h3>Completed</h3>
+        </div>
+    </div>
+
+    <script>
+        // Function to create a new task
+        function createTask(taskText) {
+            const task = document.createElement('div');
+            task.classList.add('task');
+            task.draggable = true;
+            task.textContent = taskText;
+
+            // Add drag event listener to the new task
+            task.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.textContent);
+            });
+
+            return task;
+        }
+
+        // Event listener for adding new tasks
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            if (taskText) {
+                const newTask = createTask(taskText);
+                document.getElementById('todo').appendChild(newTask); // Add to "To-Do" box
+                taskInput.value = ''; // Clear the input field
+            }
+        });
+
+        const boxes = document.querySelectorAll('.box');
+
+        // Add drag and drop event listeners to boxes
+        boxes.forEach(box => {
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Allow dropping
+            });
+
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+
+                const taskText = e.dataTransfer.getData('text');
+                const tasks = document.querySelectorAll('.task');
+
+                tasks.forEach(task => {
+                    if (task.textContent === taskText) {
+                        box.appendChild(task); // Move the task to the new box
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
